@@ -99,14 +99,14 @@ use varsub, only : error
 ! Determine ranges
 !-----------------
    if (xatm(1) > xatm(n_inlev)) then 
-      call HUNT (xref,n_lev_mx,xatm(n_inlev),grd_lev)
+      call HUNT (xref,max_lev,xatm(n_inlev),grd_lev)
       if (grd_lev == 0) grd_lev=1 
-      call HUNT (xref,n_lev_mx,xatm(lev0),min_lev)
+      call HUNT (xref,max_lev,xatm(lev0),min_lev)
       if (min_lev == 0) min_lev=1 
    else
-      call HUNT (xref,n_lev_mx,xatm(1),grd_lev)
+      call HUNT (xref,max_lev,xatm(1),grd_lev)
       if (grd_lev == 0) grd_lev=1 
-      call HUNT (xref,n_lev_mx,xatm(lev0),min_lev)
+      call HUNT (xref,max_lev,xatm(lev0),min_lev)
       if (min_lev == 0) min_lev=1 
    endif
 
@@ -117,8 +117,6 @@ use varsub, only : error
 
    hrout = CALC_COOL(xatm, temp, co2vmr, ovmr, o2vmr, n2vmr, surf_temp, &
            xref, n_inlev, max_lev, min_lev, grd_lev)
-
-  print *,hrout
 
 ! interpolate back to input grid at pressures lower than press(lev0)
 !-------------------------------------------------------------------
@@ -205,9 +203,6 @@ use coedat
          n2vmr_x(ilev)  = n2vmr(i) + (n2vmr(i+1) - n2vmr(i)) * c_int
          pres_x(ilev)   = p0 * exp(-xref(ilev))
       endif
-      write(*,'(f7.3,6e12.4)')xref(ilev),temp_x(ilev),co2vmr_x(ilev),&
-         o2vmr_x(ilev),ovmr_x(ilev), n2vmr_x(ilev),pres_x(ilev)
-
    end do
 
 ! Set phi functions
