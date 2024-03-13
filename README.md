@@ -34,5 +34,3 @@ Collisional rates can be specified in the constants.f90 module.
     - for CO2-O: a_zo, b_zo, g_zo  (default: 3.5e-13, 2.32e-9, 76.75)
     - for CO2-O2: a_zo2, b_zo2, g_zo2  (default: 7.0e-17, 1.0e-9, 83.8)
     - for CO2-N2: a_zn2, b_zn2, g_zn2  (default: 7.0e-17, 6.7e-10, 83.8)
-
-- Default values are: 'a_zo' : 3.5e-13, 'b_zo' : 2.32e-9, 'g_zo' : 76.75, 'a_zn2' : 7e-17, 'b_zn2' : 6.7e-10, 'g_zn2' : 83.8, 'a_zo2' : 7e-17, 'b_zo2' : 1.0e-9, 'g_zo2' : 83.8
