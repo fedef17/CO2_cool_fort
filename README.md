@@ -1,4 +1,4 @@
-### CO2_cool - Fortran version
+# CO2_cool - Fortran version
 New parametrization of CO2 heating rate in 15um band in non-LTE conditions.
 
 ## Stand-alone version
