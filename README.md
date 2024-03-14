@@ -26,6 +26,7 @@ Profiles can either go from ground to top or reverse (determined by which is the
 
 The code is organized in a library (in directory source/modules/) that can be included in a more sophisticated model. 
 The main subroutine is CO2_NLTE_COOL, inside co2cool.f90. 
+The compilation also produces a module library file: 'lib/libco2_cool.a'
 
 Collisional rates can be specified in the constants.f90 module. 
 
