@@ -37,15 +37,15 @@ use co2cool
     else
         if (pres(1) > pres(2)) surf_temp = temp(1)
         if (pres(2) > pres(1)) surf_temp = temp(nlev)
-   end if
+    end if
 
     ! Calculate new parameters
-    print *, ' ####         start : ',seconds(),' s'
-    do i = 1,1 !000 
+!    print *, ' ####         start : ',seconds(),' s'
+!    do i = 1,1000 
     call CO2_NLTE_COOL(temp, pres, co2vmr, ovmr, o2vmr, n2vmr, lev0, &
                       surf_temp, cr_new)
-    enddo
-    print *, ' ####         end : ',seconds()/1000,' s'
+!    enddo
+!    print *, ' ####         end : ',seconds()/1000,' s'
 
     ! Write output
     open(unit=10, file=outfile, status='replace', action='write')

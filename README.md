@@ -5,7 +5,7 @@ New parametrization of CO2 heating rate in 15um band in non-LTE conditions.
 A main program is also provided in `source/main.f90` to test the parametrization on individual profiles.
 
 ### To compile:
-- Open the Makefile and change the Fortran compiler to your preferred choice (gfotran/ifort).
+- Open the Makefile and change the Fortran compiler to your preferred choice (gfortran/ifort).
 - from this folder, run: `make`
 
 ### To test:
