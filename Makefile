@@ -1,8 +1,9 @@
 # Compiler
-FC = gfortran
+FC = ifort
+#FC = gfortran
 
 # Flags
-FFLAGS = -O -m64
+FFLAGS = -O3 -m64
 
 # Directories
 SRC_DIR = source
