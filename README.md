@@ -4,7 +4,7 @@ A new parameterization of the CO2 15 µm cooling in non-LTE conditions.
 ## Library 
 
 The code is organized in a library (in directory source/modules/) that can be included in a more sophisticated model. 
-The main subroutine is CO2_NLTE_COOL, inside module file co2cool.f90. 
+The subroutine to be called is CO2_NLTE_COOL, inside module file co2cool.f90. 
 
 ## Inputs
 
