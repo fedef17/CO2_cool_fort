@@ -1,13 +1,13 @@
-# Input file for run_cool. WARNING: number of commented lines is fixed, do not change!
-# File format: 
-# - 6 fields, free format
-# - levels from bottom to top
-# - VMRs in absolute fraction (not ppm)
-# - Pressure in hPa, temperature in K
+# Input file for run_cool. WARNING: number of commented lines is fixed (8+2), do not change!
+# Your comment here 1
+# Your comment here 2 
+# Your comment here 3 
+# Your comment here 4 and last
 #
-# Number of levels, first level from the ground, surface temperature
+# nlev: number of levels; ilev0: index of the lower atmospheric level (maximum  pressure level) to be considered; T_surf: surface temperature (if negative, T_surf will be taken as the given temp at the first atmospheric level)
+# nlev, ilev0, T_surf
 71    1   -290.0
-#
+# nlev rows of 6 fields, free format: Pressure(hPa), Temp.(K) and 4 VMRs in absolute fraction (not ppm).
 # Pressure (hPa), temperature (K), CO2 VMR, O VMR, O2 VMR, N2 VMR
 1.0000e+03 2.8412e+02 3.7390e-04 1.0000e-21 2.1200e-01 7.6710e-01
 7.7880e+02 2.7090e+02 3.7390e-04 1.0000e-21 2.1200e-01 7.7280e-01
