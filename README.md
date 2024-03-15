@@ -1,5 +1,5 @@
 # CO2_cool - Fortran version
-A new parameterization of the CO2 15 µm cooling in non-LTE conditions.
+A new parameterization of the CO2 15 µm cooling in non-LTE conditions for the Earth's atmosphere.
 
 ## Library 
 
@@ -10,7 +10,7 @@ The subroutine to be called is CO2_NLTE_COOL, inside module file co2cool.f90.
 
 The following inputs are required by CO2_NLTE_COOL:
 - n_lev: Number of levels in the atmosphere (n_lev);
-- ilev0: index of the lower atmospheric level (maximum  pressure level) to be considered. Parametrization will only be activated above the selected level (at lower pressures);
+- ilev0: index of the lower atmospheric level (maximum pressure level) to be considered. Parametrization will only be activated above (i.e., to lower pressures) the selected level;
 - T_surf: surface temperature (if set to a negative value, the temperature of the first level from the surface is used);
 - 6 atmospheric profiles: pressure, temperature, VMRs of CO2, O, O2, N2 
 - temperature in K, pressure in hPa, vmrs in mol/mol (not ppm);
@@ -19,7 +19,7 @@ The following inputs are required by CO2_NLTE_COOL:
 
 ## Output
 
-The output is expressed as heating rate in units of K/day, on the same input grid.
+The output is expressed as heating rate in units of K/day, on the given input grid.
 
 ## To compile:
 - Open the Makefile and change the Fortran compiler to your preferred choice (gfortran/ifort).
@@ -38,10 +38,10 @@ A main program is also provided in `source/main.f90` to test the parametrization
 ### Input file
 - The input file `input.dat` is in a fixed format. Do not change the number of commented lines!
 
-- First input at line 9: n_lev, ilev0, T_surf
+- First input at line 9: n_lev, ilev0, T_surf.
 
 - Starting from line 12:
-    - 6 atmospheric profiles are read (n_lev rows are expected)
+    - 6 atmospheric profiles are read (n_lev rows are expected). The number of rows in the file can be larger than n_lev. Only the first n_lev rows will be read by the parameterization.
 
 ### Output file
 
