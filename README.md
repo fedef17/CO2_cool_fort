@@ -13,9 +13,9 @@ The following inputs are required by CO2_NLTE_COOL:
 - ilev0: index of the lower atmospheric level (maximum pressure level) to be considered. Parametrization will only be activated above (i.e., to lower pressures) the selected level;
 - T_surf: surface temperature (if set to a negative value, the temperature of the first level from the surface is used);
 - 6 atmospheric profiles: pressure, temperature, VMRs of CO2, O, O2, N2 
-- temperature in K, pressure in hPa, vmrs in mol/mol (not ppm);
-- the whole vertical range is needed, from the surface.
-- Input profiles can either go from ground to top or reverse;
+- Temperature in K, pressure in hPa, vmrs in mol/mol (not ppm);
+- The whole vertical range is needed, i.e., starting from the surface (or finishing at the surface if pressures are increasing).  
+- Input profiles can go either from ground to top of the atmosphere (decreasing pressures) or reverse (top to ground with increasing pressures).
 
 ## Output
 
