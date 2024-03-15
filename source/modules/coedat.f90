@@ -16,6 +16,7 @@
 !-----------------------------------------------------------------------!
 ! MAINTENANCE HISTORY:                                                  !
 ! bf  24-02-24:   adapted from python code                              !
+! MLP: 14-March-2024: Added some notes                                  !
 !=======================================================================!
 
 module coedat
@@ -27,11 +28,11 @@ module coedat
   real(dp),dimension(n_co2prof,n_lev_mx)          :: co2profs ! CO2 reference profiles (mol/mol)
   real(dp),dimension(n_co2prof         )          :: co2mean  ! CO2 mean below x = 10.25
   real(dp),dimension(n_Lesc)                      :: uco2     ! logarithm of CO2 column in cm-2
-  real(db),dimension(n_lev_mx)                    :: g_grav   
-  real(db),dimension(n_lev_mx)                    :: co2col_ovh  
-  real(dp),dimension(n_co2prof,n_Lesc)            :: Lesc
-  real(dp),dimension(n_co2prof,n_lev_cm)          :: asurf, bsurf
-  real(dp),dimension(n_co2prof,n_lev_cm,n_lev_cm) :: acoef, bcoef
+  real(db),dimension(n_lev_mx)                    :: g_grav   ! Earth's gravity
+  real(db),dimension(n_lev_mx)                    :: co2col_ovh  ! CO2 column overhead above a given level
+  real(dp),dimension(n_co2prof,n_Lesc)            :: Lesc     ! The escape probability function
+  real(dp),dimension(n_co2prof,n_lev_cm)          :: asurf, bsurf ! a and b coefficient (vectors) for the surface flux
+  real(dp),dimension(n_co2prof,n_lev_cm,n_lev_cm) :: acoef, bcoef ! a and b coefficients (matrices) for LTE cooling (Eq. 3)
 
   private
   public :: alpha, co2profs, uco2, Lesc, asurf, bsurf, acoef, bcoef, g_grav, &
