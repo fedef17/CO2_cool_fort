@@ -9,13 +9,13 @@ The main subroutine is CO2_NLTE_COOL, inside module file co2cool.f90.
 ## Inputs
 
 The following inputs are required by CO2_NLTE_COOL:
-    - n_lev: Number of levels in the atmosphere (n_lev);
-    - ilev0: index of the lower atmospheric level (maximum  pressure level) to be considered. Parametrization will only be activated above the selected level (at lower pressures);
-    - T_surf: surface temperature (if set to a negative value, the temperature of the first level from the surface is used);
-    - 6 atmospheric profiles: pressure, temperature, VMRs of CO2, O, O2, N2 
-        - temperature in K, pressure in hPa, vmrs in mol/mol (not ppm);
-        - the whole vertical range is needed, from the surface.
-        - Input profiles can either go from ground to top or reverse;
+- n_lev: Number of levels in the atmosphere (n_lev);
+- ilev0: index of the lower atmospheric level (maximum  pressure level) to be considered. Parametrization will only be activated above the selected level (at lower pressures);
+- T_surf: surface temperature (if set to a negative value, the temperature of the first level from the surface is used);
+- 6 atmospheric profiles: pressure, temperature, VMRs of CO2, O, O2, N2 
+- temperature in K, pressure in hPa, vmrs in mol/mol (not ppm);
+- the whole vertical range is needed, from the surface.
+- Input profiles can either go from ground to top or reverse;
 
 ## Output
 
@@ -51,6 +51,6 @@ Output is written in the `output.dat` file.
 Collisional rates can be specified in the constants.f90 module. 
 
 - Rates are defined in the form: z = a*np.sqrt(T) + b * np.exp(-g * T**(-1./3)). Name of the coefficients are as follows: 
-    - for CO2-O: a_zo, b_zo, g_zo  (default: 3.5e-13, 2.32e-9, 76.75)
-    - for CO2-O2: a_zo2, b_zo2, g_zo2  (default: 7.0e-17, 1.0e-9, 83.8)
-    - for CO2-N2: a_zn2, b_zn2, g_zn2  (default: 7.0e-17, 6.7e-10, 83.8)
+- for CO2-O: a_zo, b_zo, g_zo  (default: 3.5e-13, 2.32e-9, 76.75)
+- for CO2-O2: a_zo2, b_zo2, g_zo2  (default: 7.0e-17, 1.0e-9, 83.8)
+- for CO2-N2: a_zn2, b_zn2, g_zn2  (default: 7.0e-17, 6.7e-10, 83.8)
