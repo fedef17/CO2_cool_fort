@@ -41,10 +41,10 @@ A main program is also provided in `source/main.f90` to test the parametrization
 Output is written in the `output.dat` file.
 
 ### To test:
-Two input/output files examples are provided: input_test1.dat and input_test2.dat. The first computes the heating in the full pressure range provided. The second only at pressures smaller than ~1hPa.    
-- `cp input_test1.dat input.dat`
+Two input/output files examples are provided: input_test.dat and input_test2.dat. The first computes the heating in the full pressure range provided. The second only at pressures smaller than ~1hPa.    
+- `cp input_test.dat input.dat`
 - `./run_cool`
-- Check that the result in `output.dat` is consistent with `output_test1.dat`
+- Check that the result in `output.dat` is consistent with `output_test.dat`
 - The same can be done for test2.
 
 ## To modify the collisional rates:
