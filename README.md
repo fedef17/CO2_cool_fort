@@ -37,7 +37,7 @@ A main program is also provided in `source/main.f90` to test the parametrization
 - First input at line 9: `n_lev`, `lev0`, `T_surf`.
 
 - Starting from line 12:
-    - 6 atmospheric profiles are read (n_lev rows are expected). 
+    - 6 atmospheric profiles are read (`n_lev` rows are expected). 
 
 ### Output file
 Output is written in the `output.dat` file.
