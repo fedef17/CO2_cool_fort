@@ -51,7 +51,7 @@ Two input/output files (examples) are provided: input_test.dat and input_test2.d
 
 ## To modify the collisional rates:
 Collisional rates can be specified in the `constants.f90` module. Default values are as in Funke et al., JQSRT, 2012.
-- Rates are defined in the form: k = a * sqrt(T) + b * exp(- g * T^(-1./3)). Name of the coefficients are as follows: 
-- for CO2-O: a_ko, b_ko, g_ko  (default: 3.5e-13, 2.32e-9, 76.75)
-- for CO2-O2: a_ko2, b_ko2, g_ko2  (default: 7.0e-17, 1.0e-9, 83.8)
-- for CO2-N2: a_kn2, b_kn2, g_kn2  (default: 7.0e-17, 6.7e-10, 83.8)
+- Rates are defined in the form: z = a * sqrt(T) + b * exp(- g * T^(-1./3)). Name of the coefficients are as follows: 
+- for CO2-O: a_zo, b_zo, g_zo  (default: 3.5e-13, 2.32e-9, 76.75)
+- for CO2-O2: a_zo2, b_zo2, g_zo2  (default: 7.0e-17, 1.0e-9, 83.8)
+- for CO2-N2: a_zn2, b_zn2, g_zn2  (default: 7.0e-17, 6.7e-10, 83.8)
