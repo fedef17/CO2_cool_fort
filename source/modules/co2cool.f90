@@ -21,7 +21,7 @@
 ! cooling in the middle/upper atmosphere, EGUsphere [preprint],        !
 ! https://doi.org/10.5194/egusphere-2023-2424, 2023.                   !
 !----------------------------------------------------------------------!
-! STATUS: BF 20-Dec-2024                      CREATED: bf 20-Dec-2024  !
+! STATUS: BF 20-Feb-2024                      CREATED: BF 20-Feb-2024  !
 !----------------------------------------------------------------------!
 ! COPYRIGHT: (C) 2024-2024 Instituto de Astrofisica de Andalucia (IAA) !
 !----------------------------------------------------------------------!
