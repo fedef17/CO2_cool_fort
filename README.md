@@ -24,13 +24,13 @@ The following inputs are required (in order) by `CO2_NLTE_COOL`:
 The output is expressed as heating rate in units of K/day, on the given input grid in the range of p(lev0) to the minimum specified pressure.
 
 ## To compile:
-- Edit the Makefile and change the Fortran compiler to your preferred choice (gfortran/ifort).
+- Edit the `Makefile` and change the Fortran compiler to your preferred choice (e.g., gfortran/ifort).
 - From this folder, run: `make`
 
-The compilation produces a test program `run_cool` and a module library file `lib/libco2_cool.a`.
+The compilation produces a test program `run_cool` (see below) and a module library file `lib/libco2_cool.a`.
 
 ## Test the parametrization on individual profiles
-A main program is also provided in `source/main.f90` to test the parametrization on individual profiles. 
+A test program is also provided in `source/main.f90` to test the parametrization on individual profiles. 
 ### Input file
 - The input file `input.dat` is in a fixed format. Do not change the number of commented lines!
 
