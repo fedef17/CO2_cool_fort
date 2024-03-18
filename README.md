@@ -16,8 +16,8 @@ The following inputs are required (in order) by `CO2_NLTE_COOL`:
 - Units: Temperature in K, pressure in hPa, vmrs in mol/mol (not ppm), heating rate in K/day;
 - Input profiles can run either from ground to top of the atmosphere (decreasing pressures) or reverse (top to ground with increasing pressures). The pressure grid can be irregular. 
 - Important notes:
-  1) Pressure should start (end if pressures are increasing) at the surface (near 1e3 hPa), even if the lower boundary, `p(lev0)`, is located at a pressure lower than the surface pressure (higher altitudes).
-  2) In order to speed up the routine for its use in non-LTE calculations it is recommended to set up the lower boundary, `p(lev0)`, close to the limit of the LTE/non-LTE transition, e.g. 1 hPa. In this way it would avoid the expensive calculations in the LTE region.
+  1) Pressure levels should include the surface pressure (near 1e3 hPa), even if the 15 µm cooling is to be calculated only at lower pressure levels (higher altitudes), i.e.,   p(lev0) << 1e3 hPa.
+  2) If 15 µm cooling shall be calculated only in the non-LTE regime, it is recommended to set up the lower boundary, `p(lev0)`, close to the limit of the LTE/non-LTE transition, e.g. 1 hPa. In this way, more time-consuming calculations in the LTE region will be avoided.
 
 ## Output
 
