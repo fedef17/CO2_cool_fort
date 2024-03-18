@@ -42,12 +42,12 @@ A main program is also provided in `source/main.f90` to test the parametrization
 ### Output file
 Output is written in the `output.dat` file.
 
-### To test `source/main.f90`:
+### To test `main.f90`:
 Two input/output files (examples) are provided: input_test.dat and input_test2.dat. The first computes the heating in the full pressure range provided. The second only at pressures smaller than ~1hPa. Follow these steps: 
 - `cp input_test.dat input.dat`
 - `./run_cool`
 - Check that the results in `output.dat` are consistent with `output_test.dat`
-- The same oricedure can be done for test2.
+- The same procedure can be done for test2.
 
 ## To modify the collisional rates:
 Collisional rates can be specified in the `constants.f90` module. Default values are as in Funke et al., JQSRT, 2012.
