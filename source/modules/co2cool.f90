@@ -1,20 +1,20 @@
 !======================================================================!
 ! MODULE CO2COOL ---                                                   !
 !======================================================================!
-! This parameterization calculates the CO2 15 micron cooling under 	   !
-! non-LTE. 															   !
-! It is an improved and extended parameterization of the CO2 15 μm 	   !
-! cooling in the middle/upper atmosphere originally published by 	   !
+! This parameterization calculates the CO2 15 micron cooling under     !
+! non-LTE.                                                             !
+! It is an improved and extended parameterization of the CO2 15 μm     !
+! cooling in the middle/upper atmosphere originally published by       !
 ! Fomichev et al. (1998). The major improvement is its extension to    !
 ! cope with CO2 vmrs from ∼0.5 to over 10 times the CO2 pre-industrial !
-! value of 284 ppmv (i.e., 150 ppmv to 3000 ppmv). Furthermore, it 	   !
+! value of 284 ppmv (i.e., 150 ppmv to 3000 ppmv). Furthermore, it     !
 ! incorporates a more contemporary CO2 line list and the collisional   !
 ! rates that affect the CO2 15 non-LTE cooling rates.                  !
 ! It has been specifically designed for being used in GCM climate      !
 ! models and it is very fast.                                          !
 ! Authors:                                                             !
 ! Manuel López-Puertas, Federico Fabiano, Victor Fomichev, Bernd Funke,!
-! and Daniel R. Marsh          										   !
+! and Daniel R. Marsh                                                  !
 ! Please reference the parameterization (to be updated) by:            !
 ! López-Puertas, M., Fabiano, F., Fomichev, V., Funke, B., and Marsh,  !
 ! D. R.: An improved and extended parameterization of the CO2 15 µm    !
@@ -34,7 +34,7 @@
 !----------------------------------------------------------------------!
 ! MAINTENANCE HISTORY:                                                 !
 ! bf  24-02-24:   adapted from python code                             !
-! Notes added by MLP on 17 march 2024								   !
+! Notes added by MLP on 17 march 2024                                  !
 !======================================================================!
 
 module CO2COOL
@@ -47,7 +47,7 @@ module CO2COOL
 CONTAINS
 
 !======================================================================!
-!  CO2_NLTE_COOL --- subroutine for external call of parameterization       !
+!  CO2_NLTE_COOL --- subroutine for external call of parameterization  !
 !----------------------------------------------------------------------!
 ! STATUS: bf 20-Feb-2024                      CREATED: bf 20-Feb-2024  !
 !----------------------------------------------------------------------!
@@ -57,7 +57,7 @@ CONTAINS
 !       ovmr   --- vector input o vmr                                  !
 !       o2vmr  --- vector input o2 vmr                                 !
 !       n2vmr  --- vector input n2 vmr                                 !
-!       surf_temp  --- real surface temperature                             !
+!       surf_temp  --- real surface temperature                        !
 !       lev0       --- integer maximum pressure level of input grid    !
 !                      to be calculated                                !
 !----------------------------------------------------------------------!
@@ -67,12 +67,12 @@ CONTAINS
 ! NOTE: This routine computes the heating rates. It set up the internal!
 ! reference grid in x, determines the ranges of calculation, calculated!
 ! the cooling in its internal grid and interpolatess them back to the  !
-! pressure grid povided by the user. 								   !
-                                                            !
+! pressure grid povided by the user.                                   !
+!
 !----------------------------------------------------------------------!
 ! MAINTENANCE HISTORY:                                                 !
 ! bf  24-02-24:   adapted from python code                             !
-! MLP 17-03-24:   Added some notes			                           !
+! MLP 17-03-24:   Added some notes                                     !
 !======================================================================!
 
 subroutine CO2_NLTE_COOL (temp, pres, co2vmr, ovmr, o2vmr, n2vmr, lev0, &
@@ -161,12 +161,12 @@ use varsub, only : error
 end subroutine CO2_NLTE_COOL
 
 !======================================================================!
-! CALC_COOL --- function 
+! CALC_COOL --- function                                               !
 ! This function performs the calculation of the heating rate           !
 ! Interpolates the user input reference atmosphere into its internal   !
 ! x- grid and perform all calculations in the LTE and different non-LTE!
-! regions. 															   !
-!
+! regions.                                                             !
+!                                                                      !
 !----------------------------------------------------------------------!
 ! STATUS: bf 20-Feb-2024                      CREATED: bf 20-Feb-2024  !
 !----------------------------------------------------------------------!
@@ -190,7 +190,8 @@ end subroutine CO2_NLTE_COOL
 !----------------------------------------------------------------------!
 ! MAINTENANCE HISTORY:                                                 !
 ! bf  24-02-24:   adapted from python code                             !
-! MLP 17-March-2024: 	added some notes         !
+! MLP 17-March-2024:  added some notes                                 !
+! MLP 18-March-2024:  Tabs removed                                     !
 !======================================================================!
 
 function CALC_COOL (xatm, temp, co2vmr, ovmr, o2vmr, n2vmr, surf_temp, &
