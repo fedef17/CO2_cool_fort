@@ -3,31 +3,33 @@ A new parameterization of the CO2 15 µm cooling in non-LTE conditions for the E
 
 ## Library 
 
-The code is organized in a library (in directory source/modules/) that can be included in a more sophisticated model. 
+The code is organized in a library (in directory source/modules/) that can be included in a more complex GCM model. 
 The subroutine to be called is CO2_NLTE_COOL, inside module file co2cool.f90. 
 
 ## Inputs
 
 The following inputs are required (in order) by CO2_NLTE_COOL:
 - 6 atmospheric profiles: temperature, pressure, and 4 VMRs of CO2, O, O2, and N2; 
-- lev0: index of the pressure specified above corresponding to the maximum pressure level (lower boundary) to be considered for calculating the heating rate. Heating rates will be calculate from that pressure up to the minimum pressure specfied in the pressure array. E.g, if p is specifed in the range of 1e3 to 1e-6 hPa (or 1e-6 to 1e3 hPa) and lev0=index(p(1e0)), the heating rate will be calculated in the range of 1e0 to 1e-6 hPa.
+- lev0: index of the pressure specified above corresponding to the maximum pressure level (lower boundary) to be considered for calculating the heating rate. Heating rates will be calculate from that pressure up to the minimum pressure specified in the pressure array. E.g, if p is specified in the range of 1e3 to 1e-6 hPa (or 1e-6 to 1e3 hPa) and lev0=index(p(1e0)), the heating rate will be calculated in the range of 1e0 to 1e-6 hPa.
 - surf_temp: surface temperature (if set to a negative value, the temperature of the maximum pressure level will be used);
-- hr: heating rate. This is an input/out array whose values in the range of p(lev0) (max. pressure considered) to the minimum specied pressure (minimum(pressure)) are replaced by the routine; 
+- hr: heating rate. This is an input/out array whose values in the range of p(lev0) (max. pressure considered) to the minimum specified pressure (minimum(pressure)) are calculated by the routine; 
 - Units: Temperature in K, pressure in hPa, vmrs in mol/mol (not ppm), heating rate in K/day;
-- Input profiles can go either from ground to top of the atmosphere (decreasing pressures) or reverse (top to ground with increasing pressures).
-- Important note: pressure should start (end if pressures are increasing) at the surface (near 1e3 hPa), even if the lower boundary, p(lev0), is located at a lower presure (higher altitudes).
+- Input profiles can run either from ground to top of the atmosphere (decreasing pressures) or reverse (top to ground with increasing pressures). The pressure grid can be irregular. 
+- Important notes:
+  1) Pressure should start (end if pressures are increasing) at the surface (near 1e3 hPa), even if the lower boundary, p(lev0), is located at a pressure lower than the surface pressure (higher altitudes).
+  2) In order to speed up the routine for its use in non-LTE calculations it is recommended to set up the lower boundary, p(lev0), close to the limit of the LTE/non-LTE transition, e.g. 1 hPa. In this way it would avoid the expensive calculations in the LTE region.
 
 ## Output
 
-The output is expressed as heating rate in units of K/day, on the given input grid in the range of p(lev0) to the minimum specifed pressure.
+The output is expressed as heating rate in units of K/day, on the given input grid in the range of p(lev0) to the minimum specified pressure.
 
 ## To compile:
-- Open the Makefile and change the Fortran compiler to your preferred choice (gfortran/ifort).
+- Edit the Makefile and change the Fortran compiler to your preferred choice (gfortran/ifort).
 - From this folder, run: `make`
 
 The compilation produces a test program `run_cool` and a module library file `lib/libco2_cool.a`.
 
-## Test program
+## Test the parametrization on individual profiles
 A main program is also provided in `source/main.f90` to test the parametrization on individual profiles. 
 ### Input file
 - The input file `input.dat` is in a fixed format. Do not change the number of commented lines!
@@ -40,16 +42,16 @@ A main program is also provided in `source/main.f90` to test the parametrization
 ### Output file
 Output is written in the `output.dat` file.
 
-### To test:
-Two input/output files examples are provided: input_test.dat and input_test2.dat. The first computes the heating in the full pressure range provided. The second only at pressures smaller than ~1hPa.    
+### To test `source/main.f90`:
+Two input/output files (examples) are provided: input_test.dat and input_test2.dat. The first computes the heating in the full pressure range provided. The second only at pressures smaller than ~1hPa. Follow these steps: 
 - `cp input_test.dat input.dat`
 - `./run_cool`
-- Check that the result in `output.dat` is consistent with `output_test.dat`
-- The same can be done for test2.
+- Check that the results in `output.dat` are consistent with `output_test.dat`
+- The same oricedure can be done for test2.
 
 ## To modify the collisional rates:
-Collisional rates can be specified in the constants.f90 module. Default values are as in Funke et al., JQSRT, 2012.
-- Rates are defined in the form: z = a*np.sqrt(T) + b * np.exp(-g * T**(-1./3)). Name of the coefficients are as follows: 
-- for CO2-O: a_zo, b_zo, g_zo  (default: 3.5e-13, 2.32e-9, 76.75)
-- for CO2-O2: a_zo2, b_zo2, g_zo2  (default: 7.0e-17, 1.0e-9, 83.8)
-- for CO2-N2: a_zn2, b_zn2, g_zn2  (default: 7.0e-17, 6.7e-10, 83.8)
+Collisional rates can be specified in the `constants.f90` module. Default values are as in Funke et al., JQSRT, 2012.
+- Rates are defined in the form: k = a * sqrt(T) + b * exp(- g * T^(-1./3)). Name of the coefficients are as follows: 
+- for CO2-O: a_ko, b_ko, g_ko  (default: 3.5e-13, 2.32e-9, 76.75)
+- for CO2-O2: a_ko2, b_ko2, g_ko2  (default: 7.0e-17, 1.0e-9, 83.8)
+- for CO2-N2: a_kn2, b_kn2, g_kn2  (default: 7.0e-17, 6.7e-10, 83.8)
