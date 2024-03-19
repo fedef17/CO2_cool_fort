@@ -43,7 +43,7 @@ A test program is also provided in `source/main.f90` to test the parametrization
 Output is written in the `output.dat` file.
 
 ### To test `main.f90`:
-Two input files (examples) are provided: `input_test.dat` and `input_test2.dat` with their corresponding `output_test.dat` and `output_test2.dat` files. The first computes the heating in the full pressure range provided. The second only at pressures smaller than ~1hPa. Follow these steps: 
+Two input files (examples) are provided: `input_test.dat` and `input_test2.dat` with their corresponding `output_test.dat` and `output_test2.dat` files. The first computes the heating in the full pressure range provided. The second only at pressures smaller than ~1hPa. To test the routine follow these steps: 
 - `cp input_test.dat input.dat`
 - `./run_cool`
 - Check that the results in `output.dat` are consistent with `output_test.dat`
