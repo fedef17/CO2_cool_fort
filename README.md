@@ -47,7 +47,7 @@ Two input files (examples) are provided: `input_test.dat` and `input_test2.dat` 
 - `cp input_test.dat input.dat`
 - `./run_cool`
 - Check that the results in `output.dat` are consistent with `output_test.dat`
-- The same procedure can be done for test2.
+- The same procedure can be followed for test2.
 
 ## To modify the collisional rates:
 Collisional rates can be specified in the `constants.f90` module. Default values are as in Funke et al., JQSRT, 2012.
