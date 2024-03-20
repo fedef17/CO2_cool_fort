@@ -9,14 +9,14 @@ The subroutine to be called is `CO2_NLTE_COOL`, inside module file `co2cool.f90`
 ## Inputs
 
 The following inputs are required (in order) by `CO2_NLTE_COOL`:
-- 6 atmospheric profiles: temperature, pressure, and 4 VMRs of CO2, O, O2, and N2; 
-- `lev0`: index of the pressure specified above corresponding to the maximum pressure level (lower boundary) to be considered for calculating the heating rate. Heating rates will be calculate from that pressure up to the minimum pressure specified in the pressure array. E.g, if `p` is specified in the range of 1e3 to 1e-6 hPa (or 1e-6 to 1e3 hPa) and `lev0=index(p(1e0))`, the heating rate will be calculated in the range of 1e0 to 1e-6 hPa.
+- Atmospheric profiles as function of pressure for the temperature and the VMRs of CO2, O, O2, and N2; 
+- `lev0`: the index of the given pressures so that p(`lev0`) is the maximum pressure level (lower boundary) to be considered for calculating the heating rate. Heating rates will be calculated from that pressure up to the minimum pressure specified in the pressure array. E.g, if `p` is given in the range of 1e3 hPa to 1e-6 hPa (or 1e-6 hPa to 1e3 hPa) and p(`lev0`) = 1 hPa, the heating rate will be calculated in the range of 1 hPa to 1e-6 hPa.
 - `surf_temp`: surface temperature (if set to a negative value, the temperature of the maximum pressure level will be used);
-- `hr`: heating rate. This is an input/out array with the same dimension of pressure. It will be calculated ONLY at pressures in the range of `p(lev0)` (max. pressure considered) to the minimum specified pressure (minimum(pressure)). 
+- `hr`: heating rate. This is an input/out array with the same dimension of pressure. It will be calculated ONLY at pressures in the range of `p(lev0)` (max. pressure considered) to the minimum given pressure (minimum(pressure)). 
 - Units: Temperature in K, pressure in hPa, vmrs in mol/mol (not ppm), heating rate in K/day;
 - Input profiles can run either from ground to top of the atmosphere (decreasing pressures) or reverse (top to ground with increasing pressures). The pressure grid can be irregular. 
 - Important notes:
-  1) Pressure levels should include the surface pressure (near 1e3 hPa), even if the 15 µm cooling is to be calculated only at lower pressure levels (higher altitudes), i.e.,   p(lev0) << 1e3 hPa.
+  1) Pressure levels should include the surface pressure (near 1e3 hPa), even if the 15 µm cooling is to be calculated only at lower pressure levels (higher altitudes), i.e., p(lev0) << 1e3 hPa.
   2) If 15 µm cooling shall be calculated only in the non-LTE regime, it is recommended to set up the lower boundary, `p(lev0)`, close to the limit of the LTE/non-LTE transition, e.g. 1 hPa. In this way, more time-consuming calculations in the LTE region will be avoided.
 
 ## Output
