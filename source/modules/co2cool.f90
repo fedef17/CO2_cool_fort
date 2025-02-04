@@ -1,7 +1,27 @@
 !======================================================================!
-! MODULE CO2COOL ---  !!! add a description !!!                        !
+! MODULE CO2COOL ---                                                   !
+!======================================================================!
+! This parameterization calculates the CO2 15 micron cooling under     !
+! non-LTE.                                                             !
+! It is an improved and extended parameterization of the CO2 15 μm     !
+! cooling in the middle/upper atmosphere originally published by       !
+! Fomichev et al. (1998). The major improvement is its extension to    !
+! cope with CO2 vmrs from ∼0.5 to over 10 times the CO2 pre-industrial !
+! value of 284 ppmv (i.e., 150 ppmv to 3000 ppmv). Furthermore, it     !
+! incorporates a more contemporary CO2 line list and the collisional   !
+! rates that affect the CO2 15 non-LTE cooling rates.                  !
+! It has been specifically designed for being used in GCM climate      !
+! models and it is very fast.                                          !
+! Authors:                                                             !
+! Manuel López-Puertas, Federico Fabiano, Victor Fomichev, Bernd Funke,!
+! and Daniel R. Marsh                                                  !
+! Please reference the parameterization (to be updated) by:            !
+! López-Puertas, M., Fabiano, F., Fomichev, V., Funke, B., and Marsh,  !
+! D. R.: An improved and extended parameterization of the CO2 15 µm    !
+! cooling in the middle/upper atmosphere, EGUsphere [preprint],        !
+! https://doi.org/10.5194/egusphere-2023-2424, 2023.                   !
 !----------------------------------------------------------------------!
-! STATUS: bf 20-Dec-2024                      CREATED: bf 20-Dec-2024  !
+! STATUS: BF 20-Feb-2024                      CREATED: BF 20-Feb-2024  !
 !----------------------------------------------------------------------!
 ! COPYRIGHT: (C) 2024-2024 Instituto de Astrofisica de Andalucia (IAA) !
 !----------------------------------------------------------------------!
@@ -14,6 +34,7 @@
 !----------------------------------------------------------------------!
 ! MAINTENANCE HISTORY:                                                 !
 ! bf  24-02-24:   adapted from python code                             !
+! Notes added by MLP on 17 march 2024                                  !
 !======================================================================!
 
 module CO2COOL
@@ -21,12 +42,12 @@ module CO2COOL
 
   implicit NONE
   private
-  public :: NEW_PARAM
+  public :: CO2_NLTE_COOL
 
 CONTAINS
 
 !======================================================================!
-! NEW_PARAM --- subroutine for external call of parameterization       !
+!  CO2_NLTE_COOL --- subroutine for external call of parameterization  !
 !----------------------------------------------------------------------!
 ! STATUS: bf 20-Feb-2024                      CREATED: bf 20-Feb-2024  !
 !----------------------------------------------------------------------!
@@ -36,20 +57,25 @@ CONTAINS
 !       ovmr   --- vector input o vmr                                  !
 !       o2vmr  --- vector input o2 vmr                                 !
 !       n2vmr  --- vector input n2 vmr                                 !
-!       surf_temp  --- surface temperature                             !
+!       surf_temp  --- real surface temperature                        !
 !       lev0       --- integer maximum pressure level of input grid    !
 !                      to be calculated                                !
 !----------------------------------------------------------------------!
 ! OUTPUT:                                                              !
-!       hr    --- computed cooling rate on input grid (K day-1)        !
+!       hr    --- computed heating rate on input grid (K day-1)        !
 !----------------------------------------------------------------------!
-! NOTE:                                                                !
+! NOTE: This routine computes the heating rates. It set up the internal!
+! reference grid in x, determines the ranges of calculation, calculated!
+! the cooling in its internal grid and interpolatess them back to the  !
+! pressure grid povided by the user.                                   !
+!
 !----------------------------------------------------------------------!
 ! MAINTENANCE HISTORY:                                                 !
 ! bf  24-02-24:   adapted from python code                             !
+! MLP 17-03-24:   Added some notes                                     !
 !======================================================================!
 
-subroutine NEW_PARAM (temp, pres, co2vmr, ovmr, o2vmr, n2vmr, lev0, &
+subroutine CO2_NLTE_COOL (temp, pres, co2vmr, ovmr, o2vmr, n2vmr, lev0, &
                       surf_temp, hr)
 
 use constants
@@ -89,7 +115,7 @@ use varsub, only : error
    if (istat/=0) call error(routine ,'Allocation of xatm failed')
    xatm = log(p0/pres)
 
-! set reference grid
+! Set reference grid
 !-------------------
    max_lev = ceiling((maxval(xatm)-0.125_dp) / 0.25_dp) + 1
    allocate(xref(max_lev),stat=istat)
@@ -110,7 +136,7 @@ use varsub, only : error
       if (min_lev == 0) min_lev=1 
    endif
 
-! calculate cooling
+! Calculate cooling
 !------------------
    allocate(hrout(max_lev),stat=istat)
    if (istat/=0) call error(routine ,'Allocation of hrout failed')
@@ -118,7 +144,7 @@ use varsub, only : error
    hrout = CALC_COOL(xatm, temp, co2vmr, ovmr, o2vmr, n2vmr, surf_temp, &
            xref, n_inlev, max_lev, min_lev, grd_lev)
 
-! interpolate back to input grid at pressures lower than press(lev0)
+! Interpolate back to input grid at pressures lower than press(lev0)
 !-------------------------------------------------------------------
    do ilev = 1,n_inlev 
       if (pres(ilev) <= pres(lev0)) then 
@@ -132,10 +158,15 @@ use varsub, only : error
    deallocate(xatm, hrout, xref, stat=istat)
    if (istat/=0) call error(routine ,'Deallocation of xatm, hrout, xref failed')
 
-end subroutine NEW_PARAM
+end subroutine CO2_NLTE_COOL
 
 !======================================================================!
-! CALC_COOL --- function !!! add a description !!!                     !
+! CALC_COOL --- function                                               !
+! This function performs the calculation of the heating rate           !
+! Interpolates the user input reference atmosphere into its internal   !
+! x- grid and perform all calculations in the LTE and different non-LTE!
+! regions.                                                             !
+!                                                                      !
 !----------------------------------------------------------------------!
 ! STATUS: bf 20-Feb-2024                      CREATED: bf 20-Feb-2024  !
 !----------------------------------------------------------------------!
@@ -153,12 +184,14 @@ end subroutine NEW_PARAM
 !       grd_lev    --- integer internal surface level                  !
 !----------------------------------------------------------------------!
 ! RESULT:                                                              !
-!       hr    --- computed cooling rate (K day-1) on internal grid     !
+!       hr    --- computed heating rate (K day-1) on internal grid     !
 !----------------------------------------------------------------------!
 ! NOTE:                                                                !
 !----------------------------------------------------------------------!
 ! MAINTENANCE HISTORY:                                                 !
 ! bf  24-02-24:   adapted from python code                             !
+! MLP 17-March-2024:  added some notes                                 !
+! MLP 18-March-2024:  Tabs removed                                     !
 !======================================================================!
 
 function CALC_COOL (xatm, temp, co2vmr, ovmr, o2vmr, n2vmr, surf_temp, &
@@ -231,7 +264,7 @@ use coedat
                        bcoef(ico2,:,ilev))**c_int
    end do
 
-! Calculate LTE region with Curtis matrix
+! Calculate the cooling in the LTE region with Curtis matrix
 !----------------------------------------
    do ilev = mic_lev, mxc_lev
       hr(ilev) = sum((acoeff(grd_lev:mxc_lev,ilev) + &
@@ -250,7 +283,7 @@ use coedat
    n_lev_rui = min(n_lev_ru-1, n_lev)+1
    n_lev_csi = min(n_lev_cs, n_lev)
 
-! Interpolate Lesc onto actual CO2
+! Interpolate Lesc (the escape function) onto actual CO2
 !-----------------------------------------
    co2m = sum(co2vmr_x(1:n_meanco2)) / (n_meanco2*one)
    call hunt (co2mean, n_co2prof, co2m, ico2)
@@ -259,7 +292,7 @@ use coedat
    c_int = (co2m - co2mean(ico2)) / (co2mean(ico2+1)-co2mean(ico2))
    Lescf  = Lesc(ico2,:) + (Lesc(ico2+1,:) - Lesc(ico2,:)) * c_int
 
-! Interpolate alpha onto actual CO2
+! Interpolate the alpha coefficient (correction factor) onto actual CO2
 !-----------------------------------------
    do ilev = n_lev_rf,n_lev_rui
       co2p = co2profs(:,ilev)
@@ -272,7 +305,7 @@ use coedat
                                   alpha(ico2,ilev-n_lev_rf+1)) * c_int
    end do
 
-! Calculate density and molmass
+! Calculate density and molecular mass, required to express the heating in K/day
 !------------------------------
    do ilev = n_lev_rf-1,n_lev  
       n_dens(ilev)  = pres_x(ilev) / (kb * temp_x(ilev))
@@ -303,7 +336,7 @@ use coedat
       Lesc_x(ilev) = min(max(Lescf(i) * (Lescf(i+1) / Lescf(i))**c_int, zero),one) 
    end do
 
-! calculate collisional rates 
+! Calculate the collisional non-LTE rates at atmos. temperatures 
 !----------------------------
    do ilev = n_lev_rf-1,n_lev  
       t13  = temp_x(ilev)**(-onedthree)
@@ -318,7 +351,7 @@ use coedat
       fac(ilev) = (numfac * co2vmr_x(ilev) * (one-lamb(ilev))) / molmass(ilev)
    end do
 
-! recurrence formula
+! Calculation using the recurrence formula (Eq. 8)
 !-------------------
    alpha_ok = one 
    eps_gn   = zero
@@ -328,7 +361,7 @@ use coedat
    eps125 = hr(n_lev_rf-1) * cp(n_lev_rf-1) / sperday
    eps_gn(n_lev_rf-1) = eps125 / fac(n_lev_rf-1)
 
-! Eq 9 of Formichev et al.
+! Eq. 10
 !-------------------------
    do ilev = n_lev_rf, n_lev_csi  
       Djj   = 0.25_dp * (dj(ilev-1) + three * dj(ilev))
@@ -339,18 +372,18 @@ use coedat
                   phi_fun(ilev-1) - Djj * phi_fun(ilev)) / Fj
    end do
 
-! cooling to space
+! Cooling to space
 !-----------------    
    if (n_lev > n_lev_cs) then
         Phi_165 = eps_gn(n_lev_cs) + phi_fun(n_lev_cs)
         eps_gn(n_lev_cs:n_lev) = Phi_165 - phi_fun(n_lev_cs:n_lev)
    endif
 
-! Eq 7 of Formichev et al.
+! Eq. 7 
 !-------------------------  
    hr(n_lev_rf:n_lev) = fac(n_lev_rf:n_lev) * eps_gn(n_lev_rf:n_lev)  
 
-! convert back to K/day
+! Convert back the heating to K/day
 !----------------------
    hr(n_lev_rf:n_lev) = hr(n_lev_rf:n_lev) * sperday / cp(n_lev_rf:n_lev) 
 

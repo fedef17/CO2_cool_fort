@@ -20,6 +20,9 @@ use co2cool
        read(10,*)
     end do
     read(10,*) nlev, lev0, surf_temp
+    do i = 1, 2
+       read(10,*)
+    end do
     allocate(pres(nlev), X(nlev), temp(nlev), &
         co2vmr(nlev), ovmr(nlev), o2vmr(nlev), n2vmr(nlev), cr_new(nlev))    
     do i = 1, nlev
@@ -34,18 +37,19 @@ use co2cool
     else
         if (pres(1) > pres(2)) surf_temp = temp(1)
         if (pres(2) > pres(1)) surf_temp = temp(nlev)
-   end if
+    end if
 
     ! Calculate new parameters
-    print *, ' ####         start : ',seconds(),' s'
-    do i = 1,1 !000 
-    call NEW_PARAM(temp, pres, co2vmr, ovmr, o2vmr, n2vmr, lev0, &
+!    print *, ' ####         start : ',seconds(),' s'
+!    do i = 1,1000 
+    call CO2_NLTE_COOL(temp, pres, co2vmr, ovmr, o2vmr, n2vmr, lev0, &
                       surf_temp, cr_new)
-    enddo
-    print *, ' ####         end : ',seconds()/1000,' s'
+!    enddo
+!    print *, ' ####         end : ',seconds()/1000,' s'
 
     ! Write output
     open(unit=10, file=outfile, status='replace', action='write')
+    write(10, '(a2, a8, 1x, a12, 1x, a20)') "##", "X", "Pres. (hPa)", "Heating rate (K/day)"
     do i = 1, size(pres)
         write(10, '(f10.4, 1x, E12.4, 1x, f12.4)') X(i), pres(i), cr_new(i)
     end do
