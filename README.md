@@ -1,5 +1,6 @@
-# CO2_cool - Fortran version
+# CO2_cool - Fortran version 1.1
 A new parameterization of the CO2 15 µm cooling in non-LTE conditions for the Earth's atmosphere.
+Version 1.1. 4 Feb 2025. Fixed bugs in CALC_COOL
 
 ## Library 
 

@@ -21,7 +21,7 @@
 ! cooling in the middle/upper atmosphere, EGUsphere [preprint],        !
 ! https://doi.org/10.5194/egusphere-2023-2424, 2023.                   !
 !----------------------------------------------------------------------!
-! STATUS: BF 20-Feb-2024                      CREATED: BF 20-Feb-2024  !
+! STATUS: BF 4-Feb-2025                      CREATED: BF 20-Feb-2024   !
 !----------------------------------------------------------------------!
 ! COPYRIGHT: (C) 2024-2024 Instituto de Astrofisica de Andalucia (IAA) !
 !----------------------------------------------------------------------!
@@ -35,6 +35,13 @@
 ! MAINTENANCE HISTORY:                                                 !
 ! bf  24-02-24:   adapted from python code                             !
 ! Notes added by MLP on 17 march 2024                                  !
+!                                                                      !
+! bf  04-02-25:                                                        !
+! Bug fixes in CALC_COOL (thanks to Francis Vitt:                      !
+! 1) Added line: hb(n_lev_csi) = co2vmr_x(n_lev_csi)/molmass(n_lev_csi)!
+!    before the loop over ilev                                         !
+! 2) Removed the line                                                  !
+!    g_grav(ilev)  = 9.81_dp  ! to be pretabulated                     !
 !======================================================================!
 
 module CO2COOL
@@ -192,6 +199,13 @@ end subroutine CO2_NLTE_COOL
 ! bf  24-02-24:   adapted from python code                             !
 ! MLP 17-March-2024:  added some notes                                 !
 ! MLP 18-March-2024:  Tabs removed                                     !
+!                                                                      !
+! bf  04-02-25:                                                        !
+! Bug fixes in CALC_COOL (thanks to Francis Vitt:                      !
+! 1) Added line: hb(n_lev_csi) = co2vmr_x(n_lev_csi)/molmass(n_lev_csi)!
+!    before the loop over ilev                                         !
+! 2) Removed the line                                                  !
+!    g_grav(ilev)  = 9.81_dp  ! to be pretabulated                     !
 !======================================================================!
 
 function CALC_COOL (xatm, temp, co2vmr, ovmr, o2vmr, n2vmr, surf_temp, &
@@ -317,8 +331,8 @@ use coedat
 !---------------------
    co2col(n_lev_csi) = co2col_ovh(n_lev_csi) * &
                        co2vmr_x(n_lev_csi) / co2profs(i_co2ref,n_lev_csi)  
+   hb(n_lev_csi) = co2vmr_x(n_lev_csi)/molmass(n_lev_csi)
    do ilev=n_lev_csi-1,n_lev_rf-1,-1 
-      g_grav(ilev)  = 9.81_dp  ! to be pretabulated
       kost    = -Nave1 / g_grav(ilev)
       hb(ilev) = co2vmr_x(ilev)/molmass(ilev)
       co2col(ilev) = 0.5_db*(hb(ilev+1) + hb(ilev)) * (pres_x(ilev+1) - &
